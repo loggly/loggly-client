@@ -18,6 +18,8 @@ package com.github.tony19;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collection;
 
 import retrofit.RestAdapter;
 import retrofit.mime.TypedString;
@@ -80,6 +82,15 @@ public class LogglyClient implements ILogglyClient {
      * @return {@code true} if successful; {@code false} otherwise
      */
     public boolean logBulk(@NotNull String... messages) {
+        return logBulk(Arrays.asList(messages));
+    }
+
+    /**
+     * Posts several log messages in bulk to Loggly
+     * @param messages messages to be logged
+     * @return {@code true} if successful; {@code false} otherwise
+     */
+    public boolean logBulk(@NotNull Collection<String> messages) {
         if (messages == null) return false;
 
         StringBuilder b = new StringBuilder();

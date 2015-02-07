@@ -24,6 +24,7 @@ import retrofit.mime.TypedInput;
  * Loggly REST interface, used internally by Retrofit
  *
  * @author tony19@gmail.com
+ * @since 1.0.0
  */
 interface ILogglyRestApi {
 

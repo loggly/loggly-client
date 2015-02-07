@@ -19,6 +19,7 @@ package com.github.tony19;
  * Loggly client interface
  *
  * @author tony19@gmail.com
+ * @since 1.0.0
  */
 public interface ILogglyClient{
 

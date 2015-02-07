@@ -88,6 +88,8 @@
                     <configuration>
                         <showDeprecation>true</showDeprecation>
                         <showWarnings>true</showWarnings>
+                        <source>1.5</source>
+                        <target>1.5</target>
                     </configuration>
                 </plugin>
 

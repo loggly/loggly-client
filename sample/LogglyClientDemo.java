@@ -26,7 +26,7 @@ public class Demo {
      *
      * @param args command-line arguments. The first and only argument
      *             should be your Loggly customer token.
-     * @throws IOException
+     *             http://loggly.com/docs/customer-token-authentication-token/
      */
     public static void main(String... args) {
 

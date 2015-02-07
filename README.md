@@ -64,7 +64,7 @@ public static void main(String... args) {
 Download
 --------
 
-loggly-client-1.0.0.jar (TBD)
+[loggly-client-1.0.0.jar][5]
 
 #### Gradle
 
@@ -89,3 +89,4 @@ Snapshots of the development version are available in [Sonatype's `snapshots` re
 [2]: http://square.github.io/retrofit/
 [3]: https://oss.sonatype.org/content/repositories/snapshots/com/github/tony19/loggly-client/
 [4]: https://www.loggly.com/docs/customer-token-authentication-token/
+[5]: http://goo.gl/msBGX9

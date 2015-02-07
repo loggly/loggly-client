@@ -98,32 +98,4 @@ public class LogglyClient implements ILogglyClient {
         }
         return ok;
     }
-
-    /**
-     * Runs a demo of the Loggly client
-     * @param args command-line arguments. The first and only argument
-     *             should be your Loggly customer token.
-     * @throws IOException
-     */
-    public static void main(String... args) {
-        final String TOKEN = System.getenv("LOGGLY_TOKEN");
-        if (TOKEN == null || TOKEN.trim().isEmpty()) {
-            System.err.println("LOGGLY_TOKEN env missing! See http://loggly.com/docs/customer-token-authentication-token/");
-            System.exit(1);
-        }
-
-        final ILogglyClient loggly = new LogglyClient(TOKEN);
-        System.out.println("posting single event to Loggly...");
-        boolean ok = loggly.log("Hello!\nThis is a\nmulti-line event!\n");
-        System.out.println(ok ? "ok" : "err");
-
-        System.out.println("posting single JSON event to Loggly...");
-        final String json = "{ \"timestamp\": \"2015-01-01T12:34:00Z\", \"message\": \"Event 100\", \"count\": 100 }";
-        ok = loggly.log(json);
-        System.out.println(ok ? "ok" : "err");
-
-        System.out.println("posting bulk events to Loggly...");
-        ok = loggly.logBulk("This is a\nmulti-line event 1", "Event 2", "Event 3");
-        System.out.println(ok ? "ok" : "err");
-    }
 }

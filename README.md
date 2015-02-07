@@ -20,10 +20,11 @@ final ILogglyClient loggly = new LogglyClient(LOGGLY_TOKEN);
  ...or several events in bulk.
  ```java
  loggly.logBulk("1st event",
-                "2nd event\nwith new-lines\n",
-                "3rd event");
+                 "2nd event\nwith new-lines\n",
+                 "3rd event");
 
-Collection<String> events = Arrays.asList("4th event", "5th event\nwith new-lines\n");
+Collection<String> events = Arrays.asList("4th event",
+                                              "5th event\nwith new-lines\n");
 loggly.logBulk(events);
 
  ```

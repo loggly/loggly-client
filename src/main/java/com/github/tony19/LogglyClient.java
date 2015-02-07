@@ -17,7 +17,6 @@ package com.github.tony19;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -86,6 +85,7 @@ public class LogglyClient implements ILogglyClient {
      * @return {@code true} if successful; {@code false} otherwise
      */
     public boolean logBulk(@NotNull String... messages) {
+        if (messages == null) return false;
         return logBulk(Arrays.asList(messages));
     }
 

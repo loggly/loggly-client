@@ -16,9 +16,8 @@
 package com.github.tony19;
 
 import org.junit.Before;
-// FIXME: @NotNull doesn't throw exception when tests run from mvn command line
-//import org.junit.Rule;
-//import org.junit.rules.ExpectedException;
+import org.junit.Rule;
+import org.junit.rules.ExpectedException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -42,9 +41,8 @@ public class LogglyClientTest {
     private @Mock ILogglyRestApi restApi;
     private static final String TOKEN = "1e29e92a-b099-49c5-a260-4c56a71f7c89";
 
-// FIXME: @NotNull doesn't throw exception when tests run from mvn command line
-//    @Rule
-//    public ExpectedException exception = ExpectedException.none();
+    @Rule
+    public ExpectedException exception = ExpectedException.none();
 
     @Before
     public void setup() {
@@ -54,23 +52,18 @@ public class LogglyClientTest {
 
     @Test
     public void constructorRejectsNull() {
-// FIXME: @NotNull doesn't throw exception when tests run from mvn command line
-//        exception.expect(IllegalArgumentException.class);
+        exception.expect(IllegalArgumentException.class);
         new LogglyClient(null);
     }
 
     @Test
     public void logRejectsNull() {
-// FIXME: @NotNull doesn't throw exception when tests run from mvn command line
-//        exception.expect(IllegalArgumentException.class);
         assertThat(loggly.log(null), is(false));
         Mockito.verifyZeroInteractions(restApi);
     }
 
     @Test
     public void logBulkRejectsNull() {
-// FIXME: @NotNull doesn't throw exception when tests run from mvn command line
-//        exception.expect(IllegalArgumentException.class);
         assertThat(loggly.logBulk(null), is(false));
         Mockito.verifyZeroInteractions(restApi);
     }

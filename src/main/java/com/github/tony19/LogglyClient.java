@@ -40,6 +40,10 @@ public class LogglyClient implements ILogglyClient {
      *              http://loggly.com/docs/customer-token-authentication-token/
      */
     public LogglyClient(@NotNull String token) {
+        if (token == null || token.isEmpty()) {
+            throw new IllegalArgumentException("token cannot be empty");
+        }
+
         RestAdapter restAdapter = new RestAdapter.Builder()
                 .setEndpoint(API_URL)
                 .build();

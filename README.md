@@ -38,5 +38,9 @@ _Maven_:
 </dependency>
 ```
 
+Snapshots of the development version are available in [Sonatype's `snapshots` repository][3].
+
+
 [1]: http://loggly.com
 [2]: http://square.github.io/retrofit/
+[3]: https://oss.sonatype.org/content/repositories/snapshots/com/github/tony19/loggly-client/

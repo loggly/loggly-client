@@ -15,13 +15,23 @@
  */
 package com.github.tony19;
 
+import java.util.Collection;
+
 /**
  * Loggly client interface
  *
  * @author tony19@gmail.com
- * @since 1.0.0
+ * @since 1.0.1
  */
 public interface ILogglyClient{
+
+    /**
+     * Callback for asynchronous logging
+     */
+    public static interface Callback {
+        void success();
+        void failure(String error);
+    }
 
     /**
      * Writes a single log event
@@ -31,9 +41,30 @@ public interface ILogglyClient{
     boolean log(String message);
 
     /**
+     * Writes a single log event asynchronously
+     * @param message message to be logged
+     * @param callback callback to be invoked on completion
+     */
+    void log(String message, Callback callback);
+
+    /**
      * Writes multiple log events at once
      * @param messages log events to be written
      * @return {@code true} if successful; {@code false} otherwise
      */
     boolean logBulk(String... messages);
+
+    /**
+     * Writes multiple log events at once
+     * @param messages log events to be written
+     * @return {@code true} if successful; {@code false} otherwise
+     */
+    boolean logBulk(Collection<String> messages);
+
+    /**
+     * Writes multiple log events at once asynchronously
+     * @param messages log events to be written
+     * @param callback callback to be invoked on completion
+     */
+    void logBulk(Collection<String> messages, Callback callback);
 }

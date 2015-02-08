@@ -66,7 +66,13 @@ public class LogglyClientTest {
 
     @Test
     public void logBulkRejectsNull() {
-        assertThat(loggly.logBulk(null), is(false));
+        assertThat(loggly.logBulk((String[])null), is(false));
+        Mockito.verifyZeroInteractions(restApi);
+    }
+
+    @Test
+    public void logBulkVarargsRejectsNull() {
+        assertThat(loggly.logBulk(null, ""), is(false));
         Mockito.verifyZeroInteractions(restApi);
     }
 

@@ -46,6 +46,31 @@ public static void main(String... args) {
 
     final String TOKEN = args[0];
     final ILogglyClient loggly = new LogglyClient(TOKEN);
+
+    System.out.println("posting single event to Loggly asynchronously...");
+    loggly.log("Hello!\nThis is a\nmulti-line event!\n",
+            new LogglyClient.Callback() {
+                public void success() {
+                    System.out.println("callback succeeded");
+                }
+
+                public void failure(String error) {
+                    System.err.println("callback failed: " + error);
+                }
+            });
+
+    System.out.println("posting bulk events to Loggly asynchronously...");
+    loggly.logBulk(Arrays.asList("E1", "E2"),
+            new LogglyClient.Callback() {
+                public void success() {
+                    System.out.println("bulk callback succeeded");
+                }
+
+                public void failure(String error) {
+                    System.err.println("bulk callback failed: " + error);
+                }
+            });
+
     System.out.println("posting single event to Loggly...");
     boolean ok = loggly.log("Hello!\nThis is a\nmulti-line event!\n");
     System.out.println(ok ? "ok" : "err");

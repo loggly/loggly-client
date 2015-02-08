@@ -36,14 +36,6 @@ public class LogglyClient implements ILogglyClient {
     private final String token;
 
     /**
-     * Callback for asynchronous logging
-     */
-    public static interface Callback {
-        void success();
-        void failure(String error);
-    }
-
-    /**
      * Creates a Loggly client
      * @param token Loggly customer token
      *              http://loggly.com/docs/customer-token-authentication-token/
@@ -130,6 +122,7 @@ public class LogglyClient implements ILogglyClient {
         if (messages == null) return false;
 
         String parcel = joinStrings(messages);
+        if (parcel.isEmpty()) return false;
 
         boolean ok;
         try {
@@ -150,6 +143,7 @@ public class LogglyClient implements ILogglyClient {
         if (messages == null) return;
 
         String parcel = joinStrings(messages);
+        if (parcel.isEmpty()) return;
 
         loggly.logBulk(token,
                 new TypedString(parcel),
@@ -175,6 +169,10 @@ public class LogglyClient implements ILogglyClient {
     private String joinStrings(Collection<String> messages) {
         StringBuilder b = new StringBuilder();
         for (String s : messages) {
+            if (s == null || s.isEmpty()) {
+                continue;
+            }
+
             // Preserve new-lines in this event by replacing them
             // with "\r". Otherwise, they're processed as event
             // delimiters, resulting in unintentional multiple events.

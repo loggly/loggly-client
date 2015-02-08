@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import com.github.tony19.LogglyClient;
+import com.github.tony19.ILogglyClient;
 import com.github.tony19.LogglyClient;
 
 /**
  * Demonstrates Loggly client usage
  */
-public class Demo {
+public class LogglyClientDemo {
 
     /**
      * Runs a demo of the Loggly client
@@ -30,7 +30,7 @@ public class Demo {
      */
     public static void main(String... args) {
 
-        if (args[0] == null || args[0].trim().isEmpty()) {
+        if (args.length == 0 || args[0].trim().isEmpty()) {
             System.err.println("missing argument: loggly token\nsee http://loggly.com/docs/customer-token-authentication-token/");
             System.exit(1);
         }

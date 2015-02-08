@@ -39,7 +39,7 @@ Example
 ```java
 public static void main(String... args) {
 
-    if (args[0] == null || args[0].trim().isEmpty()) {
+    if (args.length == 0 || args[0].trim().isEmpty()) {
         System.err.println("missing argument: loggly token\nsee http://loggly.com/docs/customer-token-authentication-token/");
         System.exit(1);
     }

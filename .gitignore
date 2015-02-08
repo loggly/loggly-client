@@ -17,3 +17,5 @@ target
 # Intellij files
 .idea
 *.iml
+
+.DS_Store

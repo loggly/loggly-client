@@ -15,6 +15,15 @@ final ILogglyClient loggly = new LogglyClient(LOGGLY_TOKEN);
  ```java
  loggly.log("Hellow world!");
  loggly.log("Ok to contain\nnew-lines in same event\n");
+ loggly.log("Ok to contain\nnew-lines in same event\n",
+              new LogglyClient.Callback() {
+                 public void success() {
+                     System.out.println("async log succeeded");
+                 }
+                 public void failure(String error) {
+                     System.err.println("async log failed: " + error);
+                 }
+             });
  ```
 
  ...or several events in bulk.
@@ -26,7 +35,15 @@ final ILogglyClient loggly = new LogglyClient(LOGGLY_TOKEN);
 Collection<String> events = Arrays.asList("4th event",
                                               "5th event\nwith new-lines\n");
 loggly.logBulk(events);
-
+loggly.logBulk(events,
+        new LogglyClient.Callback() {
+            public void success() {
+                System.out.println("async bulk log succeeded");
+            }
+            public void failure(String error) {
+                System.err.println("async bulk log failed: " + error);
+            }
+        });
  ```
 
  **Note:** In order to preserve event boundaries in a **bulk upload**, `loggly-client` replaces new-line characters (`\n'`) in an event with `'\r'`, which are subsequently stripped by Loggly. In the example above, the event is seen in Loggly as:
@@ -51,11 +68,10 @@ public static void main(String... args) {
     loggly.log("Hello!\nThis is a\nmulti-line event!\n",
             new LogglyClient.Callback() {
                 public void success() {
-                    System.out.println("callback succeeded");
+                    System.out.println("async log succeeded");
                 }
-
                 public void failure(String error) {
-                    System.err.println("callback failed: " + error);
+                    System.err.println("async log failed: " + error);
                 }
             });
 
@@ -63,11 +79,10 @@ public static void main(String... args) {
     loggly.logBulk(Arrays.asList("E1", "E2"),
             new LogglyClient.Callback() {
                 public void success() {
-                    System.out.println("bulk callback succeeded");
+                    System.out.println("async bulk log succeeded");
                 }
-
                 public void failure(String error) {
-                    System.err.println("bulk callback failed: " + error);
+                    System.err.println("async bulk log failed: " + error);
                 }
             });
 
@@ -94,7 +109,7 @@ Download
 #### Gradle
 
 ```
-compile 'com.github.tony19:loggly-client:1.0.0'
+compile 'com.github.tony19:loggly-client:1.0.1'
 ```
 
 #### Maven
@@ -103,7 +118,7 @@ compile 'com.github.tony19:loggly-client:1.0.0'
 <dependency>
   <groupId>com.github.tony19</groupId>
   <artifactId>loggly-client</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.1</version>
 </dependency>
 ```
 

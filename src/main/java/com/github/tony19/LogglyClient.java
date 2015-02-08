@@ -30,7 +30,7 @@ import retrofit.mime.TypedString;
  */
 public class LogglyClient implements ILogglyClient {
     private static final String API_URL = "http://logs-01.loggly.com/";
-    private final ILogglyRestApi loggly;
+    private final ILogglyRestService loggly;
     private final String token;
 
     /**
@@ -48,16 +48,16 @@ public class LogglyClient implements ILogglyClient {
                 .build();
 
         this.token = token;
-        this.loggly = restAdapter.create(ILogglyRestApi.class);
+        this.loggly = restAdapter.create(ILogglyRestService.class);
     }
 
     /**
      * Creates a Loggly client with the specified REST API.
      * This is package private for internal testing only.
      * @param token Loggly customer token
-     * @param restApi implementation of {@link ILogglyRestApi}
+     * @param restApi implementation of {@link ILogglyRestService}
      */
-    LogglyClient(@NotNull String token, ILogglyRestApi restApi) {
+    LogglyClient(@NotNull String token, ILogglyRestService restApi) {
         this.token = token;
         this.loggly = restApi;
     }

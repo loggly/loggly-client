@@ -37,8 +37,10 @@ import static org.mockito.Matchers.anyString;
 @RunWith(MockitoJUnitRunner.class)
 public class LogglyClientTest {
 
+    @Mock
+    private ILogglyRestService restApi;
+
     private ILogglyClient loggly;
-    private @Mock ILogglyRestApi restApi;
     private static final String TOKEN = "1e29e92a-b099-49c5-a260-4c56a71f7c89";
 
     @Rule
@@ -46,7 +48,7 @@ public class LogglyClientTest {
 
     @Before
     public void setup() {
-        restApi = Mockito.mock(ILogglyRestApi.class);
+        restApi = Mockito.mock(ILogglyRestService.class);
         loggly = new LogglyClient(TOKEN, restApi);
     }
 

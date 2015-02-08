@@ -21,6 +21,8 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import retrofit.RestAdapter;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 import retrofit.mime.TypedString;
 
 /**
@@ -32,6 +34,14 @@ public class LogglyClient implements ILogglyClient {
     private static final String API_URL = "http://logs-01.loggly.com/";
     private final ILogglyRestService loggly;
     private final String token;
+
+    /**
+     * Callback for asynchronous logging
+     */
+    public static interface Callback {
+        void success();
+        void failure(String error);
+    }
 
     /**
      * Creates a Loggly client
@@ -74,9 +84,31 @@ public class LogglyClient implements ILogglyClient {
         try {
             ok = loggly.log(token, new TypedString(message)).isOk();
         } catch (Exception e) {
+            e.printStackTrace();
             ok = false;
         }
         return ok;
+    }
+
+    /**
+     * Posts a log message asynchronously to Loggly
+     * @param message message to be logged
+     * @param callback callback to be invoked on completion of the post
+     */
+    public void log(@NotNull String message, final Callback callback) {
+        if (message == null) return;
+
+        loggly.log(token,
+                new TypedString(message),
+                new retrofit.Callback<LogglyResponse>() {
+                    public void success(LogglyResponse logglyResponse, Response response) {
+                        callback.success();
+                    }
+
+                    public void failure(RetrofitError retrofitError) {
+                        callback.failure(retrofitError.getMessage());
+                    }
+                });
     }
 
     /**
@@ -97,6 +129,50 @@ public class LogglyClient implements ILogglyClient {
     public boolean logBulk(@NotNull Collection<String> messages) {
         if (messages == null) return false;
 
+        String parcel = joinStrings(messages);
+
+        boolean ok;
+        try {
+            ok = loggly.logBulk(token, new TypedString(parcel)).isOk();
+        } catch (Exception e) {
+            e.printStackTrace();
+            ok = false;
+        }
+        return ok;
+    }
+
+    /**
+     * Posts several log messages in bulk to Loggly asynchronously
+     * @param messages messages to be logged
+     * @param callback callback to be invoked on completion of the post
+     */
+    public void logBulk(@NotNull Collection<String> messages, final Callback callback) {
+        if (messages == null) return;
+
+        String parcel = joinStrings(messages);
+
+        loggly.logBulk(token,
+                new TypedString(parcel),
+                new retrofit.Callback<LogglyResponse>() {
+                    public void success(LogglyResponse logglyResponse, Response response) {
+                        callback.success();
+                    }
+
+                    public void failure(RetrofitError retrofitError) {
+                        callback.failure(retrofitError.getMessage());
+                    }
+                });
+    }
+
+    /**
+     * Combines a collection of messages to be sent to Loggly.
+     * In order to preserve event boundaries, the new lines in
+     * each message are replaced with '\r', which get stripped
+     * by Loggly.
+     * @param messages messages to be combined
+     * @return a single string containing all the messages
+     */
+    private String joinStrings(Collection<String> messages) {
         StringBuilder b = new StringBuilder();
         for (String s : messages) {
             // Preserve new-lines in this event by replacing them
@@ -104,13 +180,6 @@ public class LogglyClient implements ILogglyClient {
             // delimiters, resulting in unintentional multiple events.
             b.append(s.replaceAll("[\r\n]", "\r")).append('\n');
         }
-
-        boolean ok;
-        try {
-            ok = loggly.logBulk(token, new TypedString(b.toString())).isOk();
-        } catch (Exception e) {
-            ok = false;
-        }
-        return ok;
+        return b.toString();
     }
 }

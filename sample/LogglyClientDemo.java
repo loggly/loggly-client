@@ -13,8 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import com.github.tony19.ILogglyClient;
-import com.github.tony19.LogglyClient;
+import com.github.tony19.loggly.ILogglyClient;
+import com.github.tony19.loggly.LogglyClient;
 
 import java.util.Arrays;
 

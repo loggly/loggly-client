@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.tony19;
+package com.github.tony19.loggly;
 
 import retrofit.Callback;
 import retrofit.http.Body;
@@ -32,7 +32,7 @@ interface ILogglyRestService {
     /**
      * Posts a single log event to Loggly's REST endpoint
      * @param message log event to be posted
-     * @return result of the post as a {@link com.github.tony19.LogglyResponse}
+     * @return result of the post as a {@link com.github.tony19.loggly.LogglyResponse}
      */
     @POST("/inputs/{token}/tag/http/")
     LogglyResponse log(@Path("token") String token, @Body TypedInput message);
@@ -50,7 +50,7 @@ interface ILogglyRestService {
      * @param messages log event messages, each delimited by new-line
      *                 The text is parsed for a log event in each line.
      *                 e.g., "Hello\nWorld" would create two log events.
-     * @return result of the post as a {@link com.github.tony19.LogglyResponse}
+     * @return result of the post as a {@link com.github.tony19.loggly.LogglyResponse}
      */
     @POST("/bulk/{token}/tag/bulk/")
     LogglyResponse logBulk(@Path("token") String token, @Body TypedInput messages);

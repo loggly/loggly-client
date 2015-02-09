@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.tony19;
+package com.github.tony19.loggly;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -31,7 +31,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 
 /**
- * Tests {@link com.github.tony19.LogglyClient}
+ * Tests {@link com.github.tony19.loggly.LogglyClient}
  * @author tony19@gmail.com
  */
 @RunWith(MockitoJUnitRunner.class)

@@ -15,8 +15,6 @@
  */
 package com.github.tony19.loggly;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -40,7 +38,7 @@ public class LogglyClient implements ILogglyClient {
      * @param token Loggly customer token
      *              http://loggly.com/docs/customer-token-authentication-token/
      */
-    public LogglyClient(@NotNull String token) {
+    public LogglyClient(String token) {
         if (token == null || token.isEmpty()) {
             throw new IllegalArgumentException("token cannot be empty");
         }
@@ -59,7 +57,7 @@ public class LogglyClient implements ILogglyClient {
      * @param token Loggly customer token
      * @param restApi implementation of {@link ILogglyRestService}
      */
-    LogglyClient(@NotNull String token, ILogglyRestService restApi) {
+    LogglyClient(String token, ILogglyRestService restApi) {
         this.token = token;
         this.loggly = restApi;
     }
@@ -69,7 +67,7 @@ public class LogglyClient implements ILogglyClient {
      * @param message message to be logged
      * @return {@code true} if successful; {@code false} otherwise
      */
-    public boolean log(@NotNull String message) {
+    public boolean log(String message) {
         if (message == null) return false;
 
         boolean ok;
@@ -87,7 +85,7 @@ public class LogglyClient implements ILogglyClient {
      * @param message message to be logged
      * @param callback callback to be invoked on completion of the post
      */
-    public void log(@NotNull String message, final Callback callback) {
+    public void log(String message, final Callback callback) {
         if (message == null) return;
 
         loggly.log(token,
@@ -108,7 +106,7 @@ public class LogglyClient implements ILogglyClient {
      * @param messages messages to be logged
      * @return {@code true} if successful; {@code false} otherwise
      */
-    public boolean logBulk(@NotNull String... messages) {
+    public boolean logBulk(String... messages) {
         if (messages == null) return false;
         return logBulk(Arrays.asList(messages));
     }
@@ -118,7 +116,7 @@ public class LogglyClient implements ILogglyClient {
      * @param messages messages to be logged
      * @return {@code true} if successful; {@code false} otherwise
      */
-    public boolean logBulk(@NotNull Collection<String> messages) {
+    public boolean logBulk(Collection<String> messages) {
         if (messages == null) return false;
 
         String parcel = joinStrings(messages);
@@ -139,7 +137,7 @@ public class LogglyClient implements ILogglyClient {
      * @param messages messages to be logged
      * @param callback callback to be invoked on completion of the post
      */
-    public void logBulk(@NotNull Collection<String> messages, final Callback callback) {
+    public void logBulk(Collection<String> messages, final Callback callback) {
         if (messages == null) return;
 
         String parcel = joinStrings(messages);

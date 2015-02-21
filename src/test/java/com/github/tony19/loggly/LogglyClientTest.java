@@ -60,14 +60,12 @@ public class LogglyClientTest {
 
     @Test
     public void logRejectsNull() {
-        exception.expect(IllegalArgumentException.class);
         assertThat(loggly.log(null), is(false));
         Mockito.verifyZeroInteractions(restApi);
     }
 
     @Test
     public void logBulkRejectsNull() {
-        exception.expect(IllegalArgumentException.class);
         assertThat(loggly.logBulk((String[])null), is(false));
         Mockito.verifyZeroInteractions(restApi);
     }

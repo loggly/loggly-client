@@ -1,5 +1,5 @@
 <h1>loggly-client <a href='https://tony19.ci.cloudbees.com/job/loggly-client/'><a href='https://tony19.ci.cloudbees.com/job/loggly-client/job/loggly-client-SNAPSHOT/'><img src='https://tony19.ci.cloudbees.com/buildStatus/icon?job=loggly-client/loggly-client-SNAPSHOT'></a></a></h1>
-<sup>v1.0.1</sup>
+<sup>v1.0.2</sup>
 
 A Java library for posting log messages to [Loggly][1], using [Retrofit][2] to interface with Loggly's REST API.
 
@@ -104,12 +104,12 @@ public static void main(String... args) {
 Download
 --------
 
-[loggly-client-1.0.1.jar][5]
+[loggly-client-1.0.2.jar][5]
 
 #### Gradle
 
 ```
-compile 'com.github.tony19:loggly-client:1.0.1'
+compile 'com.github.tony19:loggly-client:1.0.2'
 ```
 
 #### Maven
@@ -118,7 +118,7 @@ compile 'com.github.tony19:loggly-client:1.0.1'
 <dependency>
   <groupId>com.github.tony19</groupId>
   <artifactId>loggly-client</artifactId>
-  <version>1.0.1</version>
+  <version>1.0.2</version>
 </dependency>
 ```
 
@@ -129,4 +129,4 @@ Snapshots of the development version are available in [Sonatype's `snapshots` re
 [2]: http://square.github.io/retrofit/
 [3]: https://oss.sonatype.org/content/repositories/snapshots/com/github/tony19/loggly-client/
 [4]: https://www.loggly.com/docs/customer-token-authentication-token/
-[5]: http://goo.gl/gLDVmu
+[5]: http://goo.gl/BkpE4B

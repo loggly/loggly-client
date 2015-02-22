@@ -13,7 +13,7 @@ final ILogglyClient loggly = new LogglyClient(LOGGLY_TOKEN);
 
 2. Log a single event...
  ```java
- loggly.log("Hellow world!");
+ loggly.log("Hello world!");
  loggly.log("Ok to contain\nnew-lines in same event\n");
  loggly.log("Ok to contain\nnew-lines in same event\n",
               new LogglyClient.Callback() {

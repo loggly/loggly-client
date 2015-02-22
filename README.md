@@ -14,7 +14,8 @@ final ILogglyClient loggly = new LogglyClient(LOGGLY_TOKEN);
 2. Log a single event...
  ```java
  loggly.log("Hello world!");
- loggly.log("Ok to contain\nnew-lines in same event\n");
+
+ // async call
  loggly.log("Ok to contain\nnew-lines in same event\n",
               new LogglyClient.Callback() {
                  public void success() {
@@ -35,6 +36,8 @@ final ILogglyClient loggly = new LogglyClient(LOGGLY_TOKEN);
 Collection<String> events = Arrays.asList("4th event",
                                               "5th event\nwith new-lines\n");
 loggly.logBulk(events);
+
+// async call
 loggly.logBulk(events,
         new LogglyClient.Callback() {
             public void success() {

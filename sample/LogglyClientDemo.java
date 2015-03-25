@@ -76,5 +76,10 @@ public class LogglyClientDemo {
         System.out.println("posting bulk events to Loggly...");
         ok = loggly.logBulk("This is a\nmulti-line event 1", "Event 2", "Event 3");
         System.out.println(ok ? "ok" : "err");
+
+        System.out.println("setting log tags to 'foo', 'bar', and 'baz'...");
+        loggly.setTags("foo", "bar,baz");
+        ok = loggly.log("This should be tagged with 'foo', 'bar', and 'baz'");
+        System.out.println(ok ? "ok" : "err");
     }
 }

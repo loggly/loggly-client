@@ -32,6 +32,7 @@ public class LogglyClient implements ILogglyClient {
     private static final String API_URL = "http://logs-01.loggly.com/";
     private final ILogglyRestService loggly;
     private final String token;
+    private String tags;
 
     /**
      * Creates a Loggly client
@@ -63,6 +64,31 @@ public class LogglyClient implements ILogglyClient {
     }
 
     /**
+     * Sets the tags to use for Loggly messages. The list of
+     * strings are converted into a single CSV (trailing/leading
+     * spaces stripped from each entry).
+     * @param tags CSV or list of tags
+     */
+    public void setTags(String... tags) {
+        StringBuilder builder = new StringBuilder();
+        boolean first = true;
+        for (String s : tags) {
+            s = s.trim();
+            for (String t : s.split(",")) {
+                 t = t.trim();
+                 if (!t.isEmpty()) {
+                     if (!first) {
+                         builder.append(",");
+                     }
+                     builder.append(t);
+                 }
+                 first = false;
+            }
+        }
+        this.tags = builder.length() > 0 ? builder.toString() : null;
+    }
+
+    /**
      * Posts a log message to Loggly
      * @param message message to be logged
      * @return {@code true} if successful; {@code false} otherwise
@@ -72,7 +98,7 @@ public class LogglyClient implements ILogglyClient {
 
         boolean ok;
         try {
-            ok = loggly.log(token, new TypedString(message)).isOk();
+            ok = loggly.log(token, tags, new TypedString(message)).isOk();
         } catch (Exception e) {
             e.printStackTrace();
             ok = false;
@@ -89,6 +115,7 @@ public class LogglyClient implements ILogglyClient {
         if (message == null) return;
 
         loggly.log(token,
+                tags,
                 new TypedString(message),
                 new retrofit.Callback<LogglyResponse>() {
                     public void success(LogglyResponse logglyResponse, Response response) {
@@ -124,7 +151,7 @@ public class LogglyClient implements ILogglyClient {
 
         boolean ok;
         try {
-            ok = loggly.logBulk(token, new TypedString(parcel)).isOk();
+            ok = loggly.logBulk(token, tags, new TypedString(parcel)).isOk();
         } catch (Exception e) {
             e.printStackTrace();
             ok = false;
@@ -144,6 +171,7 @@ public class LogglyClient implements ILogglyClient {
         if (parcel.isEmpty()) return;
 
         loggly.logBulk(token,
+                tags,
                 new TypedString(parcel),
                 new retrofit.Callback<LogglyResponse>() {
                     public void success(LogglyResponse logglyResponse, Response response) {

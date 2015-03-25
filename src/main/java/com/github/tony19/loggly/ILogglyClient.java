@@ -21,7 +21,7 @@ import java.util.Collection;
  * Loggly client interface
  *
  * @author tony19@gmail.com
- * @since 1.0.1
+ * @since 1.0.3
  */
 public interface ILogglyClient{
 
@@ -67,4 +67,10 @@ public interface ILogglyClient{
      * @param callback callback to be invoked on completion
      */
     void logBulk(Collection<String> messages, Callback callback);
+
+    /**
+     * Sets the tags to use for Loggly messages
+     * @param tags CSV or list of tags
+     */
+    void setTags(String... tags);
 }

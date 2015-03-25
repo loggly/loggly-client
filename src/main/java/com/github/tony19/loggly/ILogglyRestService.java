@@ -17,6 +17,7 @@ package com.github.tony19.loggly;
 
 import retrofit.Callback;
 import retrofit.http.Body;
+import retrofit.http.Header;
 import retrofit.http.POST;
 import retrofit.http.Path;
 import retrofit.mime.TypedInput;
@@ -25,43 +26,51 @@ import retrofit.mime.TypedInput;
  * Loggly REST interface, used internally by Retrofit
  *
  * @author tony19@gmail.com
- * @since 1.0.1
+ * @since 1.0.3
  */
 interface ILogglyRestService {
 
-    /**
+  /**
      * Posts a single log event to Loggly's REST endpoint
+     * @param token Loggly customer token
+     * @param tags CSV of tags
      * @param message log event to be posted
      * @return result of the post as a {@link com.github.tony19.loggly.LogglyResponse}
      */
-    @POST("/inputs/{token}/tag/http/")
-    LogglyResponse log(@Path("token") String token, @Body TypedInput message);
+    @POST("/inputs/{token}")
+    LogglyResponse log(@Path("token") String token, @Header("X-LOGGLY-TAG") String tags, @Body TypedInput message);
 
     /**
      * Posts a single log event to Loggly's REST endpoint
+     * @param token Loggly customer token
+     * @param tags CSV of tags
      * @param message log event to be posted
      * @param callback callback to be invoked on completion of the post
      */
-    @POST("/inputs/{token}/tag/http/")
-    void log(@Path("token") String token, @Body TypedInput message, Callback<LogglyResponse> callback);
+    @POST("/inputs/{token}")
+    void log(@Path("token") String token, @Header("X-LOGGLY-TAG") String tags, @Body TypedInput message, Callback<LogglyResponse> callback);
 
     /**
      * Posts several log events at once to Loggly's bulk REST endpoint
+     * @param token Loggly customer token
+     * @param tags CSV of tags
      * @param messages log event messages, each delimited by new-line
      *                 The text is parsed for a log event in each line.
      *                 e.g., "Hello\nWorld" would create two log events.
      * @return result of the post as a {@link com.github.tony19.loggly.LogglyResponse}
      */
-    @POST("/bulk/{token}/tag/bulk/")
-    LogglyResponse logBulk(@Path("token") String token, @Body TypedInput messages);
+    @POST("/bulk/{token}")
+    LogglyResponse logBulk(@Path("token") String token, @Header("X-LOGGLY-TAG") String tags, @Body TypedInput messages);
 
     /**
      * Posts several log events at once to Loggly's bulk REST endpoint
+     * @param token Loggly customer token
+     * @param tags CSV of tags
      * @param messages log event messages, each delimited by new-line
      *                 The text is parsed for a log event in each line.
      *                 e.g., "Hello\nWorld" would create two log events.
      * @param callback callback to be invoked on completion of the post
      */
-    @POST("/bulk/{token}/tag/bulk/")
-    void logBulk(@Path("token") String token, @Body TypedInput messages, Callback<LogglyResponse> callback);
+    @POST("/bulk/{token}")
+    void logBulk(@Path("token") String token, @Header("X-LOGGLY-TAG") String tags, @Body TypedInput messages, Callback<LogglyResponse> callback);
 }

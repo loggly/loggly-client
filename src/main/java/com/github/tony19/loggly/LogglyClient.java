@@ -73,7 +73,6 @@ public class LogglyClient implements ILogglyClient {
         StringBuilder builder = new StringBuilder();
         boolean first = true;
         for (String s : tags) {
-            s = s.trim();
             for (String t : s.split(",")) {
                  t = t.trim();
                  if (!t.isEmpty()) {
@@ -85,6 +84,8 @@ public class LogglyClient implements ILogglyClient {
                  first = false;
             }
         }
+        // "tags" field must be null for Retrofit to exclude Loggly tags header.
+        // Empty header string is not acceptable.
         this.tags = builder.length() > 0 ? builder.toString() : null;
     }
 

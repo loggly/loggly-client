@@ -42,7 +42,6 @@ public class LogglyClientTest {
 
     private ILogglyClient loggly;
     private static final String TOKEN = "1e29e92a-b099-49c5-a260-4c56a71f7c89";
-    private static final String DEFAULT_TAGS = "test";
     private static final String NO_TAGS = null;
 
     @Rule
@@ -105,45 +104,35 @@ public class LogglyClientTest {
     @Test
     public void singleTagIsSentToLoggly() {
         loggly.setTags("foo");
-        Mockito.doReturn(LogglyResponse.OK).when(restApi).logBulk(anyString(), anyString(), any(TypedString.class));
-        final boolean ok = loggly.logBulk("event 2");
-        assertThat(ok, is(true));
-        Mockito.verify(restApi).logBulk(TOKEN, "foo", new TypedString("event 2\n"));
+        loggly.logBulk("event");
+        Mockito.verify(restApi).logBulk(TOKEN, "foo", new TypedString("event\n"));
     }
 
     @Test
-    public void singleCSVTagIsSentToLoggly() {
+    public void singleCsvTagIsSentToLoggly() {
         loggly.setTags("foo,bar");
-        Mockito.doReturn(LogglyResponse.OK).when(restApi).logBulk(anyString(), anyString(), any(TypedString.class));
-        final boolean ok = loggly.logBulk("event 2");
-        assertThat(ok, is(true));
-        Mockito.verify(restApi).logBulk(TOKEN, "foo,bar", new TypedString("event 2\n"));
+        loggly.logBulk("event");
+        Mockito.verify(restApi).logBulk(TOKEN, "foo,bar", new TypedString("event\n"));
     }
 
     @Test
-    public void multipleTagsareSentToLoggly() {
+    public void multipleTagsAreSentToLoggly() {
         loggly.setTags("foo", "bar");
-        Mockito.doReturn(LogglyResponse.OK).when(restApi).logBulk(anyString(), anyString(), any(TypedString.class));
-        final boolean ok = loggly.logBulk("event 2");
-        assertThat(ok, is(true));
-        Mockito.verify(restApi).logBulk(TOKEN, "foo,bar", new TypedString("event 2\n"));
+        loggly.logBulk("event");
+        Mockito.verify(restApi).logBulk(TOKEN, "foo,bar", new TypedString("event\n"));
     }
 
     @Test
-    public void mixOfSingleTagAndMultipleTagsareSentToLoggly() {
+    public void mixOfSingleTagAndMultipleTagsAreSentToLoggly() {
         loggly.setTags("foo", "bar", "baz,abc", "w,x  ,y  ,z,  ");
-        Mockito.doReturn(LogglyResponse.OK).when(restApi).logBulk(anyString(), anyString(), any(TypedString.class));
-        final boolean ok = loggly.logBulk("event 2");
-        assertThat(ok, is(true));
-        Mockito.verify(restApi).logBulk(TOKEN, "foo,bar,baz,abc,w,x,y,z", new TypedString("event 2\n"));
+        loggly.logBulk("event");
+        Mockito.verify(restApi).logBulk(TOKEN, "foo,bar,baz,abc,w,x,y,z", new TypedString("event\n"));
     }
 
     @Test
     public void emptyTagsResultInNoTags() {
         loggly.setTags("", "  ", " ,", ",  ,  ,,  ");
-        Mockito.doReturn(LogglyResponse.OK).when(restApi).logBulk(anyString(), anyString(), any(TypedString.class));
-        final boolean ok = loggly.logBulk("event 2");
-        assertThat(ok, is(true));
-        Mockito.verify(restApi).logBulk(TOKEN, NO_TAGS, new TypedString("event 2\n"));
+        loggly.logBulk("event");
+        Mockito.verify(restApi).logBulk(TOKEN, NO_TAGS, new TypedString("event\n"));
     }
 }

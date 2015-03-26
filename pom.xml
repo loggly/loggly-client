@@ -35,6 +35,13 @@
         <url>https://github.com/tony19/loggly-client/issues</url>
     </issueManagement>
 
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <!-- redirect test output to a file in order to reduce noise -->
+        <maven.test.redirectTestOutputToFile>true</maven.test.redirectTestOutputToFile>
+    </properties>
+
     <developers>
         <developer>
             <id>tony19</id>

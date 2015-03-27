@@ -28,8 +28,16 @@ public interface ILogglyClient{
     /**
      * Callback for asynchronous logging
      */
-    public static interface Callback {
+    interface Callback {
+        /**
+         * Function to be called when the log request was successfully sent to Loggly
+         */
         void success();
+
+        /**
+         * Function to be called when the log request failed
+         * @param error message details about the failure
+         */
         void failure(String error);
     }
 

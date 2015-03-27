@@ -104,7 +104,7 @@ loggly.logBulk(events,
 Download
 --------
 
-[loggly-client-1.0.3.jar][5]
+[`loggly-client-1.0.3.jar`][5]
 
 #### Gradle
 

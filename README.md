@@ -13,7 +13,7 @@ final ILogglyClient loggly = new LogglyClient(LOGGLY_TOKEN);
 ```
 
 2. Log an event...
-```java
+ ```java
  loggly.log("Hello world!");
 ```
 
@@ -21,8 +21,6 @@ final ILogglyClient loggly = new LogglyClient(LOGGLY_TOKEN);
 
 API
 ---
-
-### Tags
 
 #### `setTags(String... tags)`
 
@@ -34,10 +32,6 @@ loggly.setTags("foo", "bar");
 loggly.setTags("foo,bar");
 ```
 
-
-
-### Single Events
-
 #### `log(String message)`
 
 Logs a single event
@@ -45,7 +39,6 @@ Logs a single event
 ```java
 loggly.log("hello world!");
 ```
-
 
 
 #### `log(String message, Callback callback)`
@@ -67,20 +60,14 @@ loggly.log("hello",
         });
  ```
 
-
-
-### Bulk Events
-
-**Note:** In order to preserve event boundaries in a **bulk upload**, `loggly-client` replaces new-line characters (`'\n'`) with carriage-returns (`'\r'`), which are subsequently stripped by Loggly.
-
 #### `logBulk(String... messages)`
+**Note:** In order to preserve event boundaries in a **bulk upload**, `loggly-client` replaces new-line characters (`'\n'`) with carriage-returns (`'\r'`), which are subsequently stripped by Loggly.
 
 Logs multiple events in bulk with variable arity strings
 
  ```java
  loggly.logBulk("event 1", "event 2");
  ```
-
 
 
 #### `logBulk(Collection<String> messages)`
@@ -91,7 +78,6 @@ Logs multiple events in bulk with a `Collection<String>`
 Collection<String> events = Arrays.asList("event 1", "event 2");
 loggly.logBulk(events);
 ```
-
 
 
 #### `logBulk(Collection<String> messages, Callback callback)`

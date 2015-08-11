@@ -69,7 +69,6 @@ public class LogglyClient implements ILogglyClient {
 	/**
 	 * Creates a Loggly client with the specified REST API. This is package
 	 * private for internal testing only.
-	 * 
 	 * @param token Loggly customer token
 	 * @param restApi
 	 * implementation of {@link ILogglyRestService}

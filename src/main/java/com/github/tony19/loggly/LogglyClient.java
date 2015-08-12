@@ -27,6 +27,7 @@ import retrofit.mime.TypedString;
 
 /**
  * Loggly client
+ * 
  * @author tony19@gmail.com
  */
 public class LogglyClient implements ILogglyClient {
@@ -47,8 +48,8 @@ public class LogglyClient implements ILogglyClient {
         }
 
         RestAdapter restAdapter = new RestAdapter.Builder()
-            .setEndpoint(API_URL)
-            .build();
+                .setEndpoint(API_URL)
+                .build();
 
         this.token = token;
         this.loggly = restAdapter.create(ILogglyRestService.class);
@@ -190,7 +191,7 @@ public class LogglyClient implements ILogglyClient {
                 tags,
                 new TypedString(parcel),
                 new retrofit.Callback<LogglyResponse>() {
-                    public void success(LogglyResponse logglyResponse,Response response) {
+                    public void success(LogglyResponse logglyResponse, Response response) {
                         callback.success();
                     }
 

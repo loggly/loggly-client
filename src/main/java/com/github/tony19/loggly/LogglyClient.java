@@ -135,7 +135,7 @@ public class LogglyClient implements ILogglyClient {
         loggly.log(token,
                 tags,
                 new TypedString(message),
-                new retrofit.Callback < LogglyResponse > () {
+                new retrofit.Callback<LogglyResponse> () {
                     public void success(LogglyResponse logglyResponse, Response response) {
                         callback.success();
                     }
@@ -144,7 +144,7 @@ public class LogglyClient implements ILogglyClient {
                         callback.failure(retrofitError.getMessage());
                     }
                 });
-            }
+    }
 
     /**
      * Posts several log messages in bulk to Loggly
@@ -191,9 +191,8 @@ public class LogglyClient implements ILogglyClient {
         loggly.logBulk(token,
                 tags,
                 new TypedString(parcel),
-                new retrofit.Callback < LogglyResponse > () {
-                    public void success(LogglyResponse logglyResponse,
-            Response response) {
+                new retrofit.Callback<LogglyResponse> () {
+                    public void success(LogglyResponse logglyResponse,Response response) {
                 callback.success();
             }
 
@@ -201,11 +200,11 @@ public class LogglyClient implements ILogglyClient {
                         callback.failure(retrofitError.getMessage());
                     }
                 });
-            }
+    }
 
     /**
      * Combines a collection of messages to be sent to Loggly.
-     * In order to preserve event boundaries, the new lines in 
+     * In order to preserve event boundaries, the new lines in
      * each message are replaced with '\r', which get stripped
      * by Loggly.
      * @param messages messages to be combined

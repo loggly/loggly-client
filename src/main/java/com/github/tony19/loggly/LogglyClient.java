@@ -27,7 +27,6 @@ import retrofit.mime.TypedString;
 
 /**
  * Loggly client
- * 
  * @author tony19@gmail.com
  */
 public class LogglyClient implements ILogglyClient {
@@ -48,7 +47,8 @@ public class LogglyClient implements ILogglyClient {
         }
 
         RestAdapter restAdapter = new RestAdapter.Builder()
-            .setEndpoint(API_URL).build();
+            .setEndpoint(API_URL)
+            .build();
 
         this.token = token;
         this.loggly = restAdapter.create(ILogglyRestService.class);
@@ -67,11 +67,10 @@ public class LogglyClient implements ILogglyClient {
     }
 
     /**
-     * Creates a Loggly client with the specified REST API. 
+     * Creates a Loggly client with the specified REST API.
      * This is package private for internal testing only.
      * @param token Loggly customer token
-     * @param restApi
-     * implementation of {@link ILogglyRestService}
+     * @param restApi implementation of {@link ILogglyRestService}
      */
     LogglyClient(String token, ILogglyRestService restApi) {
         this.token = token;
@@ -79,8 +78,8 @@ public class LogglyClient implements ILogglyClient {
     }
 
     /**
-     * Sets the tags to use for Loggly messages. The list of 
-     * strings are converted into a single CSV (trailing/leading 
+     * Sets the tags to use for Loggly messages. The list of
+     * strings are converted into a single CSV (trailing/leading
      * spaces stripped from each entry).
      * @param tags CSV or list of tags
      */
@@ -125,8 +124,7 @@ public class LogglyClient implements ILogglyClient {
     /**
      * Posts a log message asynchronously to Loggly
      * @param message message to be logged
-     * @param callback
-     * callback to be invoked on completion of the post
+     * @param callback callback to be invoked on completion of the post
      */
 
     public void log(String message, final Callback callback) {
@@ -135,7 +133,7 @@ public class LogglyClient implements ILogglyClient {
         loggly.log(token,
                 tags,
                 new TypedString(message),
-                new retrofit.Callback<LogglyResponse> () {
+                new retrofit.Callback<LogglyResponse>() {
                     public void success(LogglyResponse logglyResponse, Response response) {
                         callback.success();
                     }
@@ -191,10 +189,10 @@ public class LogglyClient implements ILogglyClient {
         loggly.logBulk(token,
                 tags,
                 new TypedString(parcel),
-                new retrofit.Callback<LogglyResponse> () {
+                new retrofit.Callback<LogglyResponse>() {
                     public void success(LogglyResponse logglyResponse,Response response) {
-                callback.success();
-            }
+                        callback.success();
+                    }
 
                     public void failure(RetrofitError retrofitError) {
                         callback.failure(retrofitError.getMessage());

@@ -18,6 +18,8 @@ package com.github.tony19.loggly;
 import java.util.Arrays;
 import java.util.Collection;
 
+import android.util.Log;
+
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -25,21 +27,22 @@ import retrofit.mime.TypedString;
 
 /**
  * Loggly client
- *
+ * 
  * @author tony19@gmail.com
  */
 public class LogglyClient implements ILogglyClient {
     private static final String API_URL = "http://logs-01.loggly.com/";
-    private final ILogglyRestService loggly;
-    private final String token;
-    private String tags;
+    private ILogglyRestService loggly;
+    private String token;
+    private static String tags = "android";
 
     /**
      * Creates a Loggly client
      * @param token Loggly customer token
-     *              http://loggly.com/docs/customer-token-authentication-token/
+     *              http://loggly.com/docs/customer-token-authentication-token/tag/android
      */
     public LogglyClient(String token) {
+        this(token, tags);
         if (token == null || token.isEmpty()) {
             throw new IllegalArgumentException("token cannot be empty");
         }
@@ -48,6 +51,18 @@ public class LogglyClient implements ILogglyClient {
                 .setEndpoint(API_URL)
                 .build();
 
+        this.token = token;
+        this.loggly = restAdapter.create(ILogglyRestService.class);
+    }
+
+    public LogglyClient(String token, String tag) {
+        if (token == null || token.isEmpty()) {
+            throw new IllegalArgumentException("token cannot be empty");
+        }
+
+        RestAdapter restAdapter = new RestAdapter.Builder()
+            .setEndpoint(API_URL).build();
+        this.tags = tag;
         this.token = token;
         this.loggly = restAdapter.create(ILogglyRestService.class);
     }
@@ -112,6 +127,7 @@ public class LogglyClient implements ILogglyClient {
      * @param message message to be logged
      * @param callback callback to be invoked on completion of the post
      */
+
     public void log(String message, final Callback callback) {
         if (message == null) return;
 

@@ -34,12 +34,12 @@ public class LogglyClient implements ILogglyClient {
     private static final String API_URL = "http://logs-01.loggly.com/";
     private ILogglyRestService loggly;
     private String token;
-    static String tags = "android";
+    private static String tags = "android";
 
     /**
      * Creates a Loggly client
      * @param token Loggly customer token
-     * http://loggly.com/docs/customer-token-authentication-token/tag/android
+     *              http://loggly.com/docs/customer-token-authentication-token/tag/android
      */
     public LogglyClient(String token) {
         this(token, tags);
@@ -67,8 +67,8 @@ public class LogglyClient implements ILogglyClient {
     }
 
     /**
-     * Creates a Loggly client with the specified REST API. This is package
-     * private for internal testing only.
+     * Creates a Loggly client with the specified REST API. 
+     * This is package private for internal testing only.
      * @param token Loggly customer token
      * @param restApi
      * implementation of {@link ILogglyRestService}
@@ -79,25 +79,24 @@ public class LogglyClient implements ILogglyClient {
     }
 
     /**
-     * Sets the tags to use for Loggly messages. The list of strings are
-     * converted into a single CSV (trailing/leading spaces stripped from each
-     * entry).
-     * @param tags
-     * CSV or list of tags
+     * Sets the tags to use for Loggly messages. The list of 
+     * strings are converted into a single CSV (trailing/leading 
+     * spaces stripped from each entry).
+     * @param tags CSV or list of tags
      */
-    public void setTags(String...tags) {
+    public void setTags(String... tags) {
         StringBuilder builder = new StringBuilder();
         boolean first = true;
-        for (String s: tags) {
-            for (String t: s.split(",")) {
-                t = t.trim();
-                if (!t.isEmpty()) {
-                    if (!first) {
-                        builder.append(",");
-                    }
-                    builder.append(t);
-                }
-                first = false;
+        for (String s : tags) {
+            for (String t : s.split(",")) {
+                 t = t.trim();
+                 if (!t.isEmpty()) {
+                     if (!first) {
+                         builder.append(",");
+                     }
+                     builder.append(t);
+                 }
+                 first = false;
             }
         }
         // "tags" field must be null for Retrofit to exclude Loggly tags header.
@@ -125,8 +124,7 @@ public class LogglyClient implements ILogglyClient {
 
     /**
      * Posts a log message asynchronously to Loggly
-     * @param message 
-     * message to be logged
+     * @param message message to be logged
      * @param callback
      * callback to be invoked on completion of the post
      */
@@ -134,37 +132,36 @@ public class LogglyClient implements ILogglyClient {
     public void log(String message, final Callback callback) {
         if (message == null) return;
 
-        loggly.log(token, tags, new TypedString(message),
-        new retrofit.Callback < LogglyResponse > () {
-            public void success(LogglyResponse logglyResponse,
-            Response response) {
-                callback.success();
-            }
+        loggly.log(token,
+                tags,
+                new TypedString(message),
+                new retrofit.Callback < LogglyResponse > () {
+                    public void success(LogglyResponse logglyResponse, Response response) {
+                        callback.success();
+                    }
 
-            public void failure(RetrofitError retrofitError) {
-                callback.failure(retrofitError.getMessage());
+                    public void failure(RetrofitError retrofitError) {
+                        callback.failure(retrofitError.getMessage());
+                    }
+                });
             }
-        });
-    }
 
     /**
      * Posts several log messages in bulk to Loggly
-     * @param messages
-     * messages to be logged
+     * @param messages messages to be logged
      * @return {@code true} if successful; {@code false} otherwise
      */
-    public boolean logBulk(String...messages) {
+    public boolean logBulk(String... messages) {
         if (messages == null) return false;
         return logBulk(Arrays.asList(messages));
     }
 
     /**
      * Posts several log messages in bulk to Loggly
-     * @param messages
-     *  messages to be logged
+     * @param messages messages to be logged
      * @return {@code true} if successful; {@code false} otherwise
      */
-    public boolean logBulk(Collection < String > messages) {
+    public boolean logBulk(Collection<String> messages) {
         if (messages == null) return false;
 
         String parcel = joinStrings(messages);
@@ -182,41 +179,41 @@ public class LogglyClient implements ILogglyClient {
 
     /**
      * Posts several log messages in bulk to Loggly asynchronously
-     * @param messages
-     * messages to be logged
-     * @param callback
-     * callback to be invoked on completion of the post
+     * @param messages messages to be logged
+     * @param callback callback to be invoked on completion of the post
      */
-    public void logBulk(Collection < String > messages, final Callback callback) {
+    public void logBulk(Collection<String> messages, final Callback callback) {
         if (messages == null) return;
 
         String parcel = joinStrings(messages);
         if (parcel.isEmpty()) return;
 
-        loggly.logBulk(token, tags, new TypedString(parcel),
-        new retrofit.Callback < LogglyResponse > () {
-            public void success(LogglyResponse logglyResponse,
+        loggly.logBulk(token,
+                tags,
+                new TypedString(parcel),
+                new retrofit.Callback < LogglyResponse > () {
+                    public void success(LogglyResponse logglyResponse,
             Response response) {
                 callback.success();
             }
 
-            public void failure(RetrofitError retrofitError) {
-                callback.failure(retrofitError.getMessage());
+                    public void failure(RetrofitError retrofitError) {
+                        callback.failure(retrofitError.getMessage());
+                    }
+                });
             }
-        });
-    }
 
     /**
-     * Combines a collection of messages to be sent to Loggly. In order to
-     * preserve event boundaries, the new lines in each message are replaced
-     * with '\r', which get stripped by Loggly.
-     * @param messages
-     * messages to be combined
+     * Combines a collection of messages to be sent to Loggly.
+     * In order to preserve event boundaries, the new lines in 
+     * each message are replaced with '\r', which get stripped
+     * by Loggly.
+     * @param messages messages to be combined
      * @return a single string containing all the messages
      */
-    private String joinStrings(Collection < String > messages) {
+    private String joinStrings(Collection<String> messages) {
         StringBuilder b = new StringBuilder();
-        for (String s: messages) {
+        for (String s : messages) {
             if (s == null || s.isEmpty()) {
                 continue;
             }

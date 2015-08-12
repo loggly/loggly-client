@@ -25,19 +25,19 @@ import retrofit.mime.TypedString;
 
 /**
  * Loggly client
- *
+ * 
  * @author tony19@gmail.com
  */
 public class LogglyClient implements ILogglyClient {
     private static final String API_URL = "http://logs-01.loggly.com/";
     private final ILogglyRestService loggly;
-    private final String token;
-    private String tags;
+    private String token;
+    private String tags = "android";
 
     /**
      * Creates a Loggly client
      * @param token Loggly customer token
-     *              http://loggly.com/docs/customer-token-authentication-token/
+     * http://loggly.com/docs/customer-token-authentication-token/tag/android
      */
     public LogglyClient(String token) {
         if (token == null || token.isEmpty()) {
@@ -50,6 +50,16 @@ public class LogglyClient implements ILogglyClient {
 
         this.token = token;
         this.loggly = restAdapter.create(ILogglyRestService.class);
+    }
+
+    /**
+     * Creates a Loggly client
+     * @param token Loggly customer token
+     * http://loggly.com/docs/customer-token-authentication-token/tag/my-custom-tag
+     */
+    public LogglyClient(String token, String tag) {
+        this(token);
+        this.tags = tag;
     }
 
     /**

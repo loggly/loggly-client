@@ -15,6 +15,7 @@
  */
 package com.github.tony19.loggly;
 
+import retrofit2.Call;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;
@@ -23,12 +24,12 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
-import retrofit.mime.TypedString;
 
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.CoreMatchers.is;
-import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.isNull;
+import static org.mockito.Mockito.mock;
 
 /**
  * Tests {@link com.github.tony19.loggly.LogglyClient}
@@ -49,8 +50,13 @@ public class LogglyClientTest {
 
     @Before
     public void setup() {
-        restApi = Mockito.mock(ILogglyRestService.class);
+        restApi = mock(ILogglyRestService.class);
         loggly = new LogglyClient(TOKEN, restApi);
+
+        Call<LogglyResponse> call = mock(Call.class);
+        Mockito.doReturn(true).when(call).isExecuted();
+        Mockito.doReturn(call).when(restApi).logBulk(anyString(), anyString(), anyString());
+        Mockito.doReturn(call).when(restApi).log(anyString(), isNull(String.class), anyString());
     }
 
     @Test
@@ -79,60 +85,57 @@ public class LogglyClientTest {
 
     @Test
     public void logCallsLogRestApi() {
-        Mockito.doReturn(LogglyResponse.OK).when(restApi).log(anyString(), anyString(), any(TypedString.class));
         final String event = "hello world\nthis is a\nmulti-line event";
         assertThat(loggly.log(event), is(true));
-        Mockito.verify(restApi).log(TOKEN, NO_TAGS, new TypedString(event));
+        Mockito.verify(restApi).log(TOKEN, NO_TAGS, event);
     }
 
     @Test
     public void logBulkCallsBulkRestApi() {
-        Mockito.doReturn(LogglyResponse.OK).when(restApi).logBulk(anyString(), anyString(), any(TypedString.class));
         final boolean ok = loggly.logBulk("E 1", "E 2", "E 3");
         assertThat(ok, is(true));
-        Mockito.verify(restApi).logBulk(TOKEN, NO_TAGS, new TypedString("E 1\nE 2\nE 3\n"));
+        Mockito.verify(restApi).logBulk(TOKEN, NO_TAGS, "E 1\nE 2\nE 3\n");
     }
 
     @Test
     public void logBulkPreservesNewLineAsCarriageReturn() {
-        Mockito.doReturn(LogglyResponse.OK).when(restApi).logBulk(anyString(), anyString(), any(TypedString.class));
         final boolean ok = loggly.logBulk("multi-line\nevent here", "event 2");
         assertThat(ok, is(true));
-        Mockito.verify(restApi).logBulk(TOKEN, NO_TAGS, new TypedString("multi-line\revent here\nevent 2\n"));
+        Mockito.verify(restApi).logBulk(TOKEN, NO_TAGS, "multi-line\revent here\nevent 2\n");
     }
 
     @Test
     public void singleTagIsSentToLoggly() {
         loggly.setTags("foo");
         loggly.logBulk("event");
-        Mockito.verify(restApi).logBulk(TOKEN, "foo", new TypedString("event\n"));
+        Mockito.verify(restApi).logBulk(TOKEN, "foo", "event\n");
     }
 
     @Test
     public void singleCsvTagIsSentToLoggly() {
         loggly.setTags("foo,bar");
         loggly.logBulk("event");
-        Mockito.verify(restApi).logBulk(TOKEN, "foo,bar", new TypedString("event\n"));
+        Mockito.verify(restApi).logBulk(TOKEN, "foo,bar", "event\n");
     }
 
     @Test
     public void multipleTagsAreSentToLoggly() {
         loggly.setTags("foo", "bar");
         loggly.logBulk("event");
-        Mockito.verify(restApi).logBulk(TOKEN, "foo,bar", new TypedString("event\n"));
+        Mockito.verify(restApi).logBulk(TOKEN, "foo,bar", "event\n");
     }
 
     @Test
     public void mixOfSingleTagAndMultipleTagsAreSentToLoggly() {
         loggly.setTags("foo", "bar", "baz,abc", "w,x  ,y  ,z,  ");
         loggly.logBulk("event");
-        Mockito.verify(restApi).logBulk(TOKEN, "foo,bar,baz,abc,w,x,y,z", new TypedString("event\n"));
+        Mockito.verify(restApi).logBulk(TOKEN, "foo,bar,baz,abc,w,x,y,z", "event\n");
     }
 
     @Test
     public void emptyTagsResultInNoTags() {
         loggly.setTags("", "  ", " ,", ",  ,  ,,  ");
         loggly.logBulk("event");
-        Mockito.verify(restApi).logBulk(TOKEN, NO_TAGS, new TypedString("event\n"));
+        Mockito.verify(restApi).logBulk(TOKEN, NO_TAGS, "event\n");
     }
 }

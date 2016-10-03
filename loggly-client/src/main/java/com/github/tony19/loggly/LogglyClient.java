@@ -15,13 +15,13 @@
  */
 package com.github.tony19.loggly;
 
+import retrofit2.Call;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 import java.util.Arrays;
 import java.util.Collection;
-
-import retrofit.RestAdapter;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
-import retrofit.mime.TypedString;
 
 /**
  * Loggly client
@@ -44,8 +44,9 @@ public class LogglyClient implements ILogglyClient {
             throw new IllegalArgumentException("token cannot be empty");
         }
 
-        RestAdapter restAdapter = new RestAdapter.Builder()
-                .setEndpoint(API_URL)
+        Retrofit restAdapter = new Retrofit.Builder()
+                .baseUrl(API_URL)
+                .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
         this.token = token;
@@ -99,7 +100,7 @@ public class LogglyClient implements ILogglyClient {
 
         boolean ok;
         try {
-            ok = loggly.log(token, tags, new TypedString(message)).isOk();
+            ok = loggly.log(token, tags, message).isExecuted();
         } catch (Exception e) {
             e.printStackTrace();
             ok = false;
@@ -117,14 +118,16 @@ public class LogglyClient implements ILogglyClient {
 
         loggly.log(token,
                 tags,
-                new TypedString(message),
-                new retrofit.Callback<LogglyResponse>() {
-                    public void success(LogglyResponse logglyResponse, Response response) {
+                message,
+                new retrofit2.Callback<LogglyResponse>() {
+                    @Override
+                    public void onResponse(Call<LogglyResponse> call, Response<LogglyResponse> response) {
                         callback.success();
                     }
 
-                    public void failure(RetrofitError retrofitError) {
-                        callback.failure(retrofitError.getMessage());
+                    @Override
+                    public void onFailure(Call<LogglyResponse> call, Throwable throwable) {
+                        callback.failure(throwable.getMessage());
                     }
                 });
     }
@@ -152,7 +155,7 @@ public class LogglyClient implements ILogglyClient {
 
         boolean ok;
         try {
-            ok = loggly.logBulk(token, tags, new TypedString(parcel)).isOk();
+            ok = loggly.logBulk(token, tags, parcel).isExecuted();
         } catch (Exception e) {
             e.printStackTrace();
             ok = false;
@@ -173,14 +176,16 @@ public class LogglyClient implements ILogglyClient {
 
         loggly.logBulk(token,
                 tags,
-                new TypedString(parcel),
-                new retrofit.Callback<LogglyResponse>() {
-                    public void success(LogglyResponse logglyResponse, Response response) {
+                parcel,
+                new retrofit2.Callback<LogglyResponse>() {
+                    @Override
+                    public void onResponse(Call<LogglyResponse> call, Response<LogglyResponse> response) {
                         callback.success();
                     }
 
-                    public void failure(RetrofitError retrofitError) {
-                        callback.failure(retrofitError.getMessage());
+                    @Override
+                    public void onFailure(Call<LogglyResponse> call, Throwable throwable) {
+                        callback.failure(throwable.getMessage());
                     }
                 });
     }

@@ -1,0 +1,56 @@
+
+/*
+ * Configures project for Nexus OSS Sonatype deployment,
+ * invoked with `gradle uploadArchives`.
+ */
+
+// This plugin must be declared in all projects with artifacts
+// in order for them to be uploaded to Nexus.
+apply plugin: 'com.bmuschko.nexus'
+
+modifyPom {
+  project {
+    name 'loggly-client'
+    description 'Advanced logging for Android apps'
+    url 'https://github.com/tony19/loggly-client'
+    inceptionYear '2015'
+
+    scm {
+      url 'https://github.com/tony19/loggly-client'
+      connection 'scm:git@github.com:tony19/loggly-client.git'
+      developerConnection 'scm:git:git@github.com:tony19/loggly-client.git'
+    }
+
+    licenses {
+      license {
+        name 'Apache License, Version 2.0'
+        url 'http://www.apache.org/licenses/LICENSE-2.0'
+        distribution 'repo'
+      }
+    }
+
+    developers {
+      developer {
+        id 'tony19'
+        name 'Tony Trinh'
+        email 'tony19@gmail.com'
+      }
+    }
+  }
+}
+
+extraArchive {
+  sources = true
+  tests = true
+  javadoc = false
+}
+
+// We need to add our own javadocJar task that ignores errors
+// because there are several elements missing javadoc
+task javadocJar(type: Jar) {
+  description = 'Assembles a jar archive containing javadocs.'
+  classifier = 'javadoc'
+  from javadoc {
+    failOnError = false
+  }
+}

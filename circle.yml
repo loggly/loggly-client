@@ -1,11 +1,11 @@
 machine:
     java:
         version: oraclejdk8
+    environment:
+        ANDROID_SDK: $HOME/.android
+        ANDROID_HOME: $HOME/.android
 
 dependencies:
-    environment:
-        - ANDROID_SDK: $HOME/.android
-        - ANDROID_HOME: $HOME/.android
     pre:
         - mkdir -p "$ANDROID_SDK/licenses"
         - echo -e "\nd56f5187479451eabf01fb78af6dfcb131a6481e" > "$ANDROID_SDK/licenses/android-sdk-license"

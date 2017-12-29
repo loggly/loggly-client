@@ -11,14 +11,14 @@ apply plugin: 'com.bmuschko.nexus'
 modifyPom {
   project {
     name 'loggly-client'
-    description 'Advanced logging for Android apps'
-    url 'https://github.com/tony19/loggly-client'
+    description 'Loggly API client library'
+    url 'https://github.com/loggly/loggly-client'
     inceptionYear '2015'
 
     scm {
-      url 'https://github.com/tony19/loggly-client'
-      connection 'scm:git@github.com:tony19/loggly-client.git'
-      developerConnection 'scm:git:git@github.com:tony19/loggly-client.git'
+      url 'https://github.com/loggly/loggly-client'
+      connection 'scm:git@github.com:loggly/loggly-client.git'
+      developerConnection 'scm:git:git@github.com:loggly/loggly-client.git'
     }
 
     licenses {

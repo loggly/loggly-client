@@ -1,6 +1,8 @@
 machine:
     java:
         version: oraclejdk8
+
+compile:
     environment:
         - ANDROID_SDK: $HOME/.android
         - ANDROID_HOME: $HOME/.android

@@ -5,6 +5,12 @@ machine:
         ANDROID_SDK: $HOME/.android
         ANDROID_HOME: $HOME/.android
 
+# Simulate Android license acceptance by copying SHA from local
+# development machine at $ANDROID_SDK/licenses/android-sdk-license
+# (Mac: ~/Library/Android/sdk/licenses/android-sdk-license)
+# into CI's Android SDK directory. The SHA may require updating
+# upon moving to a new SDK version.
+# See https://stackoverflow.com/a/38381577/6277151
 dependencies:
     pre:
         - mkdir -p "$ANDROID_SDK/licenses"

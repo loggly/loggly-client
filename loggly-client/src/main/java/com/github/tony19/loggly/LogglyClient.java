@@ -29,7 +29,7 @@ import java.util.Collection;
  * @author tony19@gmail.com
  */
 public class LogglyClient implements ILogglyClient {
-    private static final String API_URL = "http://logs-01.loggly.com/";
+    private static final String API_URL = "https://logs-01.loggly.com/";
     private final ILogglyRestService loggly;
     private final String token;
     private String tags;

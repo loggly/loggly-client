@@ -15,18 +15,19 @@
  */
 package com.github.tony19.loggly;
 
-import retrofit2.Call;
 import org.junit.Before;
 import org.junit.Rule;
-import org.junit.rules.ExpectedException;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import static org.junit.Assert.assertThat;
+import retrofit2.Call;
+
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.isNull;
 import static org.mockito.Mockito.mock;
@@ -137,5 +138,19 @@ public class LogglyClientTest {
         loggly.setTags("", "  ", " ,", ",  ,  ,,  ");
         loggly.logBulk("event");
         Mockito.verify(restApi).logBulk(TOKEN, NO_TAGS, "event\n");
+    }
+
+    @Test
+    public void invalidTagsResultInNoTags() {
+        loggly.setTags("", "  ", " ,", ",  ,  ,,  ");
+        loggly.logBulk("event");
+        Mockito.verify(restApi).logBulk(TOKEN, NO_TAGS, "event\n");
+    }
+
+    @Test
+    public void invalidTagsAreSentToLogglySanitized() {
+        loggly.setTags("_startInvalid", "middle@invalid.com", "%how_many$*3");
+        loggly.logBulk("event");
+        Mockito.verify(restApi).logBulk(TOKEN, "startInvalid,middle_invalid.com,how_many_*3", "event\n");
     }
 }

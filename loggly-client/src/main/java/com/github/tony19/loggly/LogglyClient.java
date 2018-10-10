@@ -80,7 +80,7 @@ public class LogglyClient implements ILogglyClient {
                      if (!first) {
                          builder.append(",");
                      }
-                     builder.append(t);
+                     builder.append(sanitizeTag(t));
                  }
                  first = false;
             }
@@ -211,5 +211,25 @@ public class LogglyClient implements ILogglyClient {
             b.append(s.replaceAll("[\r\n]", "\r")).append('\n');
         }
         return b.toString();
+    }
+
+    /**
+     * Sanitize the tag based on the restrictions described in
+     * <a href="https://www.loggly.com/docs/tags/">https://www.loggly.com/docs/tags/</a>.
+     * Sanitation works by replacing invalid characters with the _ (underscore) character.
+     *
+     * @param tag tag to be sanitized
+     * @return the tag without invalid characters
+     */
+    private String sanitizeTag(String tag) {
+        // replace invalid characters with _
+        tag = tag.replaceAll("[^A-Za-z0-9_*,.\\-]", "_");
+
+        // don't allow non-alphanumeric values starting the tag
+        if (Character.isLetterOrDigit(tag.charAt(0))) {
+           return tag;
+        }
+
+        return tag.substring(1);
     }
 }

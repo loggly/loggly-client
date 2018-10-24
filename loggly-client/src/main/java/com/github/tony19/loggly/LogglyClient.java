@@ -223,13 +223,13 @@ public class LogglyClient implements ILogglyClient {
      */
     private String sanitizeTag(String tag) {
         // replace invalid characters with _
-        tag = tag.replaceAll("[^A-Za-z0-9_*,.\\-]", "_");
+        String sanitized = tag.replaceAll("[^A-Za-z0-9_*,.\\-]", "_");
 
         // don't allow non-alphanumeric values starting the tag
         if (Character.isLetterOrDigit(tag.charAt(0))) {
-           return tag;
+           return sanitized;
         }
 
-        return tag.substring(1);
+        return sanitized.substring(1);
     }
 }

@@ -15,6 +15,8 @@
  */
 package com.github.tony19.loggly;
 
+import com.google.gson.internal.LinkedTreeMap;
+
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Header;
@@ -39,6 +41,16 @@ interface ILogglyRestService {
     @POST("inputs/{token}")
     Call<LogglyResponse> log(@Path("token") String token, @Header("X-LOGGLY-TAG") String tags, @Body String message);
 
+    /**
+     * Posts a single json log event to Loggly's REST endpoint
+     *
+     * @param token   Loggly customer token
+     * @param tags    CSV of tags
+     * @param message log event to be posted
+     * @return result of the post as a {@link com.github.tony19.loggly.LogglyResponse}
+     */
+    @POST("inputs/{token}")
+    Call<LogglyResponse> log(@Path("token") String token, @Header("X-LOGGLY-TAG") String tags, @Body LinkedTreeMap message);
 
     /**
      * Posts several log events at once to Loggly's bulk REST endpoint

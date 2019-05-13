@@ -15,6 +15,11 @@
  */
 package com.github.tony19.loggly;
 
+import com.google.gson.JsonObject;
+import com.google.gson.internal.LinkedTreeMap;
+
+import org.json.JSONObject;
+
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -109,11 +114,51 @@ public class LogglyClient implements ILogglyClient {
     }
 
     /**
+     * Posts a json log message to Loggly
+     * @param message message to be logged
+     * @return {@code true} if successful; {@code false} otherwise
+     */
+    public boolean log(LinkedTreeMap message) {
+        if (message == null) return false;
+
+        boolean ok;
+        try {
+            ok = loggly.log(token, tags, message).isExecuted();
+        } catch (Exception e) {
+            e.printStackTrace();
+            ok = false;
+        }
+        return ok;
+    }
+
+    /**
      * Posts a log message asynchronously to Loggly
      * @param message message to be logged
      * @param callback callback to be invoked on completion of the post
      */
     public void log(String message, final Callback callback) {
+        if (message == null) return;
+
+        Call call = loggly.log(token, tags, message);
+        call.enqueue(new retrofit2.Callback<LogglyResponse>() {
+            @Override
+            public void onResponse(Call<LogglyResponse> call, Response<LogglyResponse> response) {
+                callback.success();
+            }
+
+            @Override
+            public void onFailure(Call<LogglyResponse> call, Throwable throwable) {
+                callback.failure(throwable.getMessage());
+            }
+        });
+    }
+
+    /**
+     * Posts a json log message asynchronously to Loggly
+     * @param message message to be logged
+     * @param callback callback to be invoked on completion of the post
+     */
+    public void log(LinkedTreeMap message, final Callback callback) {
         if (message == null) return;
 
         Call call = loggly.log(token, tags, message);

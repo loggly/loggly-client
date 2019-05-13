@@ -15,6 +15,11 @@
  */
 package com.github.tony19.loggly;
 
+import com.google.gson.JsonObject;
+import com.google.gson.internal.LinkedTreeMap;
+
+import org.json.JSONObject;
+
 import java.util.Collection;
 
 /**
@@ -54,6 +59,13 @@ public interface ILogglyClient{
      * @param callback callback to be invoked on completion
      */
     void log(String message, Callback callback);
+
+    /**
+     * Writes a single json log event asynchronously
+     * @param message message to be logged
+     * @param callback callback to be invoked on completion
+     */
+    void log(LinkedTreeMap message, Callback callback);
 
     /**
      * Writes multiple log events at once

@@ -15,13 +15,13 @@
  */
 package com.github.tony19.loggly;
 
+import java.util.Arrays;
+import java.util.Collection;
+
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-
-import java.util.Arrays;
-import java.util.Collection;
 
 /**
  * Loggly client
@@ -80,7 +80,7 @@ public class LogglyClient implements ILogglyClient {
                      if (!first) {
                          builder.append(",");
                      }
-                     builder.append(t);
+                     builder.append(sanitizeTag(t));
                  }
                  first = false;
             }
@@ -116,20 +116,18 @@ public class LogglyClient implements ILogglyClient {
     public void log(String message, final Callback callback) {
         if (message == null) return;
 
-        loggly.log(token,
-                tags,
-                message,
-                new retrofit2.Callback<LogglyResponse>() {
-                    @Override
-                    public void onResponse(Call<LogglyResponse> call, Response<LogglyResponse> response) {
-                        callback.success();
-                    }
+        Call call = loggly.log(token, tags, message);
+        call.enqueue(new retrofit2.Callback<LogglyResponse>() {
+            @Override
+            public void onResponse(Call<LogglyResponse> call, Response<LogglyResponse> response) {
+                callback.success();
+            }
 
-                    @Override
-                    public void onFailure(Call<LogglyResponse> call, Throwable throwable) {
-                        callback.failure(throwable.getMessage());
-                    }
-                });
+            @Override
+            public void onFailure(Call<LogglyResponse> call, Throwable throwable) {
+                callback.failure(throwable.getMessage());
+            }
+        });
     }
 
     /**
@@ -171,23 +169,23 @@ public class LogglyClient implements ILogglyClient {
     public void logBulk(Collection<String> messages, final Callback callback) {
         if (messages == null) return;
 
+
+
         String parcel = joinStrings(messages);
         if (parcel.isEmpty()) return;
 
-        loggly.logBulk(token,
-                tags,
-                parcel,
-                new retrofit2.Callback<LogglyResponse>() {
-                    @Override
-                    public void onResponse(Call<LogglyResponse> call, Response<LogglyResponse> response) {
-                        callback.success();
-                    }
+        Call call = loggly.logBulk(token, tags, parcel);
+        call.enqueue(new retrofit2.Callback<LogglyResponse>() {
+            @Override
+            public void onResponse(Call<LogglyResponse> call, Response<LogglyResponse> response) {
+                callback.success();
+            }
 
-                    @Override
-                    public void onFailure(Call<LogglyResponse> call, Throwable throwable) {
-                        callback.failure(throwable.getMessage());
-                    }
-                });
+            @Override
+            public void onFailure(Call<LogglyResponse> call, Throwable throwable) {
+                callback.failure(throwable.getMessage());
+            }
+        });
     }
 
     /**
@@ -211,5 +209,25 @@ public class LogglyClient implements ILogglyClient {
             b.append(s.replaceAll("[\r\n]", "\r")).append('\n');
         }
         return b.toString();
+    }
+
+    /**
+     * Sanitize the tag based on the restrictions described in
+     * <a href="https://www.loggly.com/docs/tags/">https://www.loggly.com/docs/tags/</a>.
+     * Sanitation works by replacing invalid characters with the _ (underscore) character.
+     *
+     * @param tag tag to be sanitized
+     * @return the tag without invalid characters
+     */
+    private String sanitizeTag(String tag) {
+        // replace invalid characters with _
+        tag = tag.replaceAll("[^A-Za-z0-9_*,.\\-]", "_");
+
+        // don't allow non-alphanumeric values starting the tag
+        if (Character.isLetterOrDigit(tag.charAt(0))) {
+           return tag;
+        }
+
+        return tag.substring(1);
     }
 }

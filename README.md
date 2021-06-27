@@ -109,7 +109,7 @@ Download
 #### Gradle
 
 ```
-compile 'com.github.tony19:loggly-client:1.0.3'
+compile 'com.github.tony19:loggly-client:1.0.4'
 ```
 
 #### Maven
@@ -118,7 +118,7 @@ compile 'com.github.tony19:loggly-client:1.0.3'
 <dependency>
   <groupId>com.github.tony19</groupId>
   <artifactId>loggly-client</artifactId>
-  <version>1.0.3</version>
+  <version>1.0.4</version>
 </dependency>
 ```
 

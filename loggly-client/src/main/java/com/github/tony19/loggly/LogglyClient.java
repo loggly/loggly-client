@@ -15,13 +15,18 @@
  */
 package com.github.tony19.loggly;
 
+import com.google.gson.JsonObject;
+import com.google.gson.internal.LinkedTreeMap;
+
+import org.json.JSONObject;
+
+import java.util.Arrays;
+import java.util.Collection;
+
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-
-import java.util.Arrays;
-import java.util.Collection;
 
 /**
  * Loggly client
@@ -109,6 +114,24 @@ public class LogglyClient implements ILogglyClient {
     }
 
     /**
+     * Posts a json log message to Loggly
+     * @param message message to be logged
+     * @return {@code true} if successful; {@code false} otherwise
+     */
+    public boolean log(LinkedTreeMap message) {
+        if (message == null) return false;
+
+        boolean ok;
+        try {
+            ok = loggly.log(token, tags, message).isExecuted();
+        } catch (Exception e) {
+            e.printStackTrace();
+            ok = false;
+        }
+        return ok;
+    }
+
+    /**
      * Posts a log message asynchronously to Loggly
      * @param message message to be logged
      * @param callback callback to be invoked on completion of the post
@@ -116,20 +139,40 @@ public class LogglyClient implements ILogglyClient {
     public void log(String message, final Callback callback) {
         if (message == null) return;
 
-        loggly.log(token,
-                tags,
-                message,
-                new retrofit2.Callback<LogglyResponse>() {
-                    @Override
-                    public void onResponse(Call<LogglyResponse> call, Response<LogglyResponse> response) {
-                        callback.success();
-                    }
+        Call call = loggly.log(token, tags, message);
+        call.enqueue(new retrofit2.Callback<LogglyResponse>() {
+            @Override
+            public void onResponse(Call<LogglyResponse> call, Response<LogglyResponse> response) {
+                callback.success();
+            }
 
-                    @Override
-                    public void onFailure(Call<LogglyResponse> call, Throwable throwable) {
-                        callback.failure(throwable.getMessage());
-                    }
-                });
+            @Override
+            public void onFailure(Call<LogglyResponse> call, Throwable throwable) {
+                callback.failure(throwable.getMessage());
+            }
+        });
+    }
+
+    /**
+     * Posts a json log message asynchronously to Loggly
+     * @param message message to be logged
+     * @param callback callback to be invoked on completion of the post
+     */
+    public void log(LinkedTreeMap message, final Callback callback) {
+        if (message == null) return;
+
+        Call call = loggly.log(token, tags, message);
+        call.enqueue(new retrofit2.Callback<LogglyResponse>() {
+            @Override
+            public void onResponse(Call<LogglyResponse> call, Response<LogglyResponse> response) {
+                callback.success();
+            }
+
+            @Override
+            public void onFailure(Call<LogglyResponse> call, Throwable throwable) {
+                callback.failure(throwable.getMessage());
+            }
+        });
     }
 
     /**
@@ -171,23 +214,23 @@ public class LogglyClient implements ILogglyClient {
     public void logBulk(Collection<String> messages, final Callback callback) {
         if (messages == null) return;
 
+
+
         String parcel = joinStrings(messages);
         if (parcel.isEmpty()) return;
 
-        loggly.logBulk(token,
-                tags,
-                parcel,
-                new retrofit2.Callback<LogglyResponse>() {
-                    @Override
-                    public void onResponse(Call<LogglyResponse> call, Response<LogglyResponse> response) {
-                        callback.success();
-                    }
+        Call call = loggly.logBulk(token, tags, parcel);
+        call.enqueue(new retrofit2.Callback<LogglyResponse>() {
+            @Override
+            public void onResponse(Call<LogglyResponse> call, Response<LogglyResponse> response) {
+                callback.success();
+            }
 
-                    @Override
-                    public void onFailure(Call<LogglyResponse> call, Throwable throwable) {
-                        callback.failure(throwable.getMessage());
-                    }
-                });
+            @Override
+            public void onFailure(Call<LogglyResponse> call, Throwable throwable) {
+                callback.failure(throwable.getMessage());
+            }
+        });
     }
 
     /**
